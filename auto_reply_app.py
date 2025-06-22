@@ -15,6 +15,7 @@ api_key = st.text_input("🔐 Gemini API Key", type="password")
 os.environ["GOOGLE_API_KEY"] = api_key
 
 # Reply generation logic
+# Reply generation logic
 if st.button("Generate Reply"):
     if not api_key or not user_query:
         st.warning("Please enter both API key and customer input.")
@@ -22,9 +23,12 @@ if st.button("Generate Reply"):
         import google.generativeai as genai
         genai.configure(api_key=api_key)
         model = genai.GenerativeModel('gemini-pro')
-        prompt = f"Write a professional, friendly email reply to this customer message:
+        
+        # ✅ Fixed multiline f-string
+        prompt = f"""Write a professional, friendly email reply to this customer message:
 
-{user_query}"
+{user_query}"""
+        
         try:
             response = model.generate_content(prompt)
             reply = response.text
@@ -32,3 +36,4 @@ if st.button("Generate Reply"):
             st.text_area("Reply", value=reply, height=200)
         except Exception as e:
             st.error(f"Error: {e}")
+
